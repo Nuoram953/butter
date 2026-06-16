@@ -1,10 +1,16 @@
+use std::fs::File;
+use std::path::PathBuf;
+use std::{fs, io};
+
 use clap::{Parser, Subcommand};
+use directories::ProjectDirs;
 
 mod commands;
+mod config;
 
 #[derive(Subcommand)]
 enum Commands {
-    Test {},
+    Check {},
 }
 
 #[derive(Parser)]
@@ -21,7 +27,7 @@ fn main() -> anyhow::Result<()> {
     let cli = Cli::parse();
 
     match &cli.command {
-        Commands::Test {} => commands::test::handle(),
+        Commands::Check {} => commands::test::handle(),
     }?;
 
     Ok(())

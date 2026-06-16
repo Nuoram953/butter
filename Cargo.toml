@@ -6,6 +6,7 @@ edition = "2024"
 [dependencies]
 anyhow = "1.0.102"
 clap = { version = "4.6.1", features = ["derive"] }
+directories = "6.0.0"
 include_dir = "0.7.4"
 serde = { version = "1.0.228", features = ["derive"] }
 serde_yaml = "0.8.26"
