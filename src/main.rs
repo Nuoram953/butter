@@ -27,7 +27,7 @@ fn main() -> anyhow::Result<()> {
     let cli = Cli::parse();
 
     match &cli.command {
-        Commands::Check {} => commands::test::handle(),
+        Commands::Check {} => commands::check::handle(),
     }?;
 
     Ok(())
