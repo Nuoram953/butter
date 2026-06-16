@@ -2,7 +2,7 @@ name: Release
 
 on:
   push:
-    branches: [main]
+    branches: [main, beta]
 
 jobs:
   release:
@@ -21,12 +21,12 @@ jobs:
       - name: Fetch tags
         run: git fetch --force --tags
 
-      - uses: actions/setup-node@v4
+      - uses: pnpm/action-setup@v6
         with:
-          node-version: lts/*
-          cache: npm
+          version: 10
+          cache: true
 
-      - run: npm ci
+      - run: pnpm install
 
       - name: Configure git
         run: |
