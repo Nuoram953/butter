@@ -1,12 +1,9 @@
-use std::fs::File;
-use std::path::PathBuf;
-use std::{fs, io};
-
 use clap::{Parser, Subcommand};
-use directories::ProjectDirs;
 
 mod commands;
 mod config;
+mod git;
+mod rules;
 
 #[derive(Subcommand)]
 enum Commands {
@@ -24,6 +21,8 @@ struct Cli {
 }
 
 fn main() -> anyhow::Result<()> {
+    env_logger::init();
+
     let cli = Cli::parse();
 
     match &cli.command {
@@ -32,7 +31,3 @@ fn main() -> anyhow::Result<()> {
 
     Ok(())
 }
-
-//create files in .config/butter
-//create commands
-//parse rules.yml
