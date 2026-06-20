@@ -1,3 +1,10 @@
+# [1.2.0-beta.3](https://github.com/Nuoram953/butter/compare/v1.2.0-beta.2...v1.2.0-beta.3) (2026-06-20)
+
+
+### Features
+
+* output to console using new module ([7511462](https://github.com/Nuoram953/butter/commit/7511462e6b18bac677ead66dd281924083201e5c))
+
 # [1.2.0-beta.2](https://github.com/Nuoram953/butter/compare/v1.2.0-beta.1...v1.2.0-beta.2) (2026-06-20)
 
 
