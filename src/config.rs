@@ -1,38 +1,36 @@
+use anyhow::{Context, Result};
 use directories::ProjectDirs;
-use serde::{Deserialize, Serialize};
-use std::{
-    fs, io,
-    path::{Path, PathBuf},
-};
+use serde::Deserialize;
+use std::{fs, io, path::PathBuf};
 
-use anyhow::Result;
+use crate::rules::file::FileRuleConfig;
 
-const APP_NAME: &str = "missed-checks";
+const APP_NAME: &str = "butter";
 const RULES_FILE: &str = "rules.yml";
 
-#[derive(Debug, Serialize, Deserialize)]
+// ======================================================
+// CONFIG ROOT (matches YAML structure)
+// ======================================================
+
+#[derive(Debug, Deserialize)]
 pub struct Config {
-    pub rules: Vec<Rule>,
+    pub rules: Vec<RuleConfig>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct Rule {
-    pub name: String,
+// ======================================================
+// RULE CONFIG ENUM (YAML tagged union)
+// ======================================================
 
-    #[serde(rename = "type")]
-    pub rule_type: RuleType,
-
-    #[serde(rename = "match")]
-    pub patterns: Vec<String>,
-
-    pub warning: String,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "lowercase")]
-pub enum RuleType {
-    File,
+#[serde(tag = "type")]
+pub enum RuleConfig {
+    File(FileRuleConfig),
 }
+
+// ======================================================
+// FILE SYSTEM / CONFIG LOCATION
+// ======================================================
 
 pub fn config_dir() -> io::Result<PathBuf> {
     let project_dirs = ProjectDirs::from("", "", APP_NAME).ok_or_else(|| {
@@ -50,36 +48,34 @@ pub fn rules_file_path() -> io::Result<PathBuf> {
 }
 
 pub fn ensure_rules_file() -> io::Result<PathBuf> {
-    let config_dir = config_dir()?;
+    let dir = config_dir()?;
+    fs::create_dir_all(&dir)?;
 
-    fs::create_dir_all(&config_dir)?;
+    let path = dir.join(RULES_FILE);
 
-    let rules_file = config_dir.join(RULES_FILE);
-
-    if !rules_file.exists() {
-        fs::write(&rules_file, DEFAULT_RULES)?;
+    if !path.exists() {
+        fs::write(&path, DEFAULT_RULES)?;
     }
 
-    Ok(rules_file)
+    Ok(path)
 }
 
-pub fn load_config() -> Result<Config> {
-    let path = ensure_rules_file()?;
-    let contents = fs::read_to_string(path)?;
+// ======================================================
+// LOAD / SAVE CONFIG
+// ======================================================
 
-    let config = serde_yaml::from_str::<Config>(&contents)?;
+pub fn load_config() -> Result<Config> {
+    let path = ensure_rules_file().context("failed to ensure rules file exists")?;
+
+    let contents = fs::read_to_string(&path).context("failed to read rules file")?;
+
+    let config: Config = serde_yaml::from_str(&contents).context("failed to parse YAML config")?;
 
     Ok(config)
 }
-
-pub fn save_config(config: &Config) -> Result<(), Box<dyn std::error::Error>> {
-    let path = ensure_rules_file()?;
-
-    let yaml = serde_yaml::to_string(config)?;
-    fs::write(path, yaml)?;
-
-    Ok(())
-}
+// ======================================================
+// DEFAULT CONFIG FILE
+// ======================================================
 
 const DEFAULT_RULES: &str = r#"
 rules:
