@@ -3,23 +3,15 @@ use directories::ProjectDirs;
 use serde::Deserialize;
 use std::{fs, io, path::PathBuf};
 
-use crate::rules::file::FileRuleConfig;
+use crate::rules::{Level, file::FileRuleConfig};
 
 const APP_NAME: &str = "butter";
 const RULES_FILE: &str = "rules.yml";
-
-// ======================================================
-// CONFIG ROOT (matches YAML structure)
-// ======================================================
 
 #[derive(Debug, Deserialize)]
 pub struct Config {
     pub rules: Vec<RuleConfig>,
 }
-
-// ======================================================
-// RULE CONFIG ENUM (YAML tagged union)
-// ======================================================
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "lowercase")]
@@ -28,9 +20,37 @@ pub enum RuleConfig {
     File(FileRuleConfig),
 }
 
-// ======================================================
-// FILE SYSTEM / CONFIG LOCATION
-// ======================================================
+impl RuleConfig {
+    pub fn evaluate(&self) -> bool {
+        match self {
+            RuleConfig::File(r) => r.evaluate(),
+        }
+    }
+
+    pub fn name(&self) -> &str {
+        match self {
+            RuleConfig::File(r) => &r.name,
+        }
+    }
+
+    pub fn message(&self) -> &str {
+        match self {
+            RuleConfig::File(r) => &r.message,
+        }
+    }
+
+    pub fn level(&self) -> &Level {
+        match self {
+            RuleConfig::File(r) => &r.level,
+        }
+    }
+
+    pub fn rule_type(&self) -> &str {
+        match self {
+            RuleConfig::File(_) => &"FILE",
+        }
+    }
+}
 
 pub fn config_dir() -> io::Result<PathBuf> {
     let project_dirs = ProjectDirs::from("", "", APP_NAME).ok_or_else(|| {
@@ -41,10 +61,6 @@ pub fn config_dir() -> io::Result<PathBuf> {
     })?;
 
     Ok(project_dirs.config_dir().to_path_buf())
-}
-
-pub fn rules_file_path() -> io::Result<PathBuf> {
-    Ok(config_dir()?.join(RULES_FILE))
 }
 
 pub fn ensure_rules_file() -> io::Result<PathBuf> {
@@ -60,10 +76,6 @@ pub fn ensure_rules_file() -> io::Result<PathBuf> {
     Ok(path)
 }
 
-// ======================================================
-// LOAD / SAVE CONFIG
-// ======================================================
-
 pub fn load_config() -> Result<Config> {
     let path = ensure_rules_file().context("failed to ensure rules file exists")?;
 
@@ -73,9 +85,6 @@ pub fn load_config() -> Result<Config> {
 
     Ok(config)
 }
-// ======================================================
-// DEFAULT CONFIG FILE
-// ======================================================
 
 const DEFAULT_RULES: &str = r#"
 rules:

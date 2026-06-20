@@ -1,10 +1,7 @@
 use log::{debug, info};
 use serde::Deserialize;
 
-use crate::{
-    git,
-    rules::{Level, Rule},
-};
+use crate::{git, rules::Level};
 
 #[derive(Debug, Deserialize)]
 pub struct FileRuleConfig {
@@ -15,12 +12,8 @@ pub struct FileRuleConfig {
     pub level: Level,
 }
 
-impl Rule for FileRuleConfig {
-    fn name(&self) -> &str {
-        todo!()
-    }
-
-    fn evaluate(&self) -> bool {
+impl FileRuleConfig {
+    pub fn evaluate(&self) -> bool {
         //TODO: branch should be dynamic
         let files = git::get_changed_files("main");
 

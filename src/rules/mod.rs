@@ -8,8 +8,3 @@ pub enum Level {
     Warn,
     Error,
 }
-
-pub trait Rule {
-    fn name(&self) -> &str;
-    fn evaluate(&self) -> bool;
-}
