@@ -4,7 +4,7 @@ set -euo pipefail
 
 REPO="${REPO:-Nuoram953/butter}"
 INSTALL_DIR="${INSTALL_DIR:-$HOME/.local/bin}"
-BINARY_NAME="${BINARY_NAME:-yagl}"
+BINARY_NAME="${BINARY_NAME:-butter}"
 API_URL="https://api.github.com/repos/${REPO}/releases/latest"
 
 if [[ "$(uname -s)" != "Linux" ]]; then
