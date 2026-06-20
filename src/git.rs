@@ -11,3 +11,12 @@ pub fn get_changed_files(base: &str) -> Vec<PathBuf> {
         .map(PathBuf::from)
         .collect()
 }
+
+pub fn is_git_repo() -> bool {
+    let output = Command::new("git")
+        .args(["rev-parse", "--git-dir"])
+        .output()
+        .expect("not a git project");
+
+    return output.stderr.len() == 0;
+}

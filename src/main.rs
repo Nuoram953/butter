@@ -1,3 +1,5 @@
+use std::process;
+
 use clap::{Parser, Subcommand};
 
 mod commands;
@@ -23,6 +25,11 @@ struct Cli {
 
 fn main() -> anyhow::Result<()> {
     env_logger::init();
+
+    if !git::is_git_repo() {
+        println!("not a git repo");
+        process::exit(1)
+    }
 
     let cli = Cli::parse();
 
