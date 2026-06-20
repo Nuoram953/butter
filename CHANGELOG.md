@@ -1,3 +1,10 @@
+# [1.2.0-beta.1](https://github.com/Nuoram953/butter/compare/v1.1.0...v1.2.0-beta.1) (2026-06-20)
+
+
+### Features
+
+* install script for linux ([3af3629](https://github.com/Nuoram953/butter/commit/3af362998efdfce341b8a3a3b736ef77020c02a4))
+
 # [1.1.0](https://github.com/Nuoram953/butter/compare/v1.0.0...v1.1.0) (2026-06-20)
 
 
