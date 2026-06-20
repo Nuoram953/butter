@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/Nuoram953/butter/compare/v1.0.0...v1.1.0) (2026-06-20)
+
+
+### Features
+
+* detect when project is git or not ([489e32c](https://github.com/Nuoram953/butter/commit/489e32cb520327cb4c42b71544be540bccb60167))
+
 # 1.0.0 (2026-06-20)
 
 
