@@ -1,3 +1,10 @@
+# [1.2.0-beta.4](https://github.com/Nuoram953/butter/compare/v1.2.0-beta.3...v1.2.0-beta.4) (2026-06-20)
+
+
+### Bug Fixes
+
+* empty `unless` in config would panic crash ([62d9771](https://github.com/Nuoram953/butter/commit/62d9771eaf1da529eaa58f583ef3ea8ea5ce184c))
+
 # [1.2.0-beta.3](https://github.com/Nuoram953/butter/compare/v1.2.0-beta.2...v1.2.0-beta.3) (2026-06-20)
 
 
