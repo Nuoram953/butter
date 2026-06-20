@@ -14,6 +14,25 @@
 * add basic `test` command ([267d9f7](https://github.com/Nuoram953/butter/commit/267d9f79f1a9e5a6fce192dbd28771a369243719))
 * add config module ([00c201a](https://github.com/Nuoram953/butter/commit/00c201a310dc3b2bd94b9ef76c629a0757f94889))
 * install script for linux ([ce5f826](https://github.com/Nuoram953/butter/commit/ce5f826b9325508c6a7dff3b13f9a4cf0d4dcafb))
+* missing file ([32fb3a5](https://github.com/Nuoram953/butter/commit/32fb3a57b5cd9ef8e717cb106bb195cd6132b618))
+* output to console using new module ([7fe52e0](https://github.com/Nuoram953/butter/commit/7fe52e0f0e86c20e00d4d6bfa12c87e982956003))
+
+# 1.0.0 (2026-06-20)
+
+
+### Bug Fixes
+
+* empty `unless` in config would panic crash ([9f5cbae](https://github.com/Nuoram953/butter/commit/9f5cbaedbd690f5ba10158b69db0d921f8c375ed))
+* wrong binary target ([228c064](https://github.com/Nuoram953/butter/commit/228c064f2de331578e3a7692df1dc2c3b7d56c69))
+* wrong binrary name ([9d4ced0](https://github.com/Nuoram953/butter/commit/9d4ced07d36448917485e1f97358a3137d0f2ce7))
+
+
+### Features
+
+* `check` command ([15e6263](https://github.com/Nuoram953/butter/commit/15e6263517bbf23ac9d67ce22f4732716ed68591))
+* add basic `test` command ([267d9f7](https://github.com/Nuoram953/butter/commit/267d9f79f1a9e5a6fce192dbd28771a369243719))
+* add config module ([00c201a](https://github.com/Nuoram953/butter/commit/00c201a310dc3b2bd94b9ef76c629a0757f94889))
+* install script for linux ([ce5f826](https://github.com/Nuoram953/butter/commit/ce5f826b9325508c6a7dff3b13f9a4cf0d4dcafb))
 * output to console using new module ([7fe52e0](https://github.com/Nuoram953/butter/commit/7fe52e0f0e86c20e00d4d6bfa12c87e982956003))
 
 # [1.2.0-beta.4](https://github.com/Nuoram953/butter/compare/v1.2.0-beta.3...v1.2.0-beta.4) (2026-06-20)
