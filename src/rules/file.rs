@@ -7,6 +7,7 @@ use crate::{git, rules::Level};
 pub struct FileRuleConfig {
     pub name: String,
     pub when: Vec<String>,
+    #[serde(default)]
     pub unless: Vec<String>,
     pub message: String,
     pub level: Level,
