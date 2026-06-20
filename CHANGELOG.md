@@ -1,3 +1,10 @@
+# [1.2.0-beta.2](https://github.com/Nuoram953/butter/compare/v1.2.0-beta.1...v1.2.0-beta.2) (2026-06-20)
+
+
+### Bug Fixes
+
+* wrong binary target ([14c28a7](https://github.com/Nuoram953/butter/commit/14c28a72b5b314e098653ca20c7da1207a31f527))
+
 # [1.2.0-beta.1](https://github.com/Nuoram953/butter/compare/v1.1.0...v1.2.0-beta.1) (2026-06-20)
 
 
