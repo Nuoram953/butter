@@ -3,16 +3,14 @@ use directories::ProjectDirs;
 use serde::Deserialize;
 use std::{fs, io, path::PathBuf};
 
-use crate::{
-    git,
-    rules::{Level, file::FileRuleConfig},
-};
+use crate::rules::{Level, file::FileRuleConfig};
 
 const APP_NAME: &str = "butter";
 const RULES_FILE: &str = "rules.yml";
 
 #[derive(Debug, Deserialize)]
 pub struct Config {
+    pub default_branch: String,
     pub rules: Vec<RuleConfig>,
 }
 
@@ -84,6 +82,7 @@ pub fn load_config() -> Result<Config> {
 }
 
 const DEFAULT_RULES: &str = r#"
+default_branch: main
 rules:
   - name: deploy_change_requires_traffic
     type: file
