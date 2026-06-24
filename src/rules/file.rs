@@ -14,9 +14,8 @@ pub struct FileRuleConfig {
 }
 
 impl FileRuleConfig {
-    pub fn evaluate(&self) -> bool {
-        //TODO: branch should be dynamic
-        let files = git::get_changed_files("main");
+    pub fn evaluate(&self, branch: Option<&str>) -> bool {
+        let files = git::get_changed_files(branch.unwrap_or("main"));
 
         let file_match_when = files.iter().any(|file| {
             self.when

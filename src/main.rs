@@ -10,7 +10,10 @@ mod rules;
 
 #[derive(Subcommand)]
 enum Commands {
-    Check {},
+    Check {
+        #[arg(short, long)]
+        branch: Option<String>,
+    },
 }
 
 #[derive(Parser)]
@@ -34,7 +37,7 @@ fn main() -> anyhow::Result<()> {
     let cli = Cli::parse();
 
     match &cli.command {
-        Commands::Check {} => commands::check::handle(),
+        Commands::Check { branch } => commands::check::handle(branch.as_deref()),
     }?;
 
     Ok(())
