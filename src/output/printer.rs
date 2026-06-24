@@ -1,4 +1,4 @@
-use crate::{config::RuleConfig, rules::Level};
+use crate::rules::result::{RuleResult, Status};
 use colored::Colorize;
 
 pub struct Printer {
@@ -10,44 +10,96 @@ impl Printer {
         Self { width: 80 }
     }
 
-    pub fn print_result(&self, rule: &RuleConfig, passed: bool) {
-        match passed {
-            true => self.print_line(rule, "success"),
-            false => match rule.level() {
-                Level::Warn => self.print_line(rule, "warning"),
-                Level::Error => self.print_line(rule, "error"),
-            },
-        };
+    pub fn print_result(&self, result: RuleResult) {
+        println!("{}", self.format_result(&result))
     }
 
-    fn print_line(&self, rule: &RuleConfig, result: &str) {
-        let rule_name = rule.name();
-        let dots = self.dot_leader(rule_name, result);
-        let result_with_color = match result {
-            "success" => "success".green(),
-            "warning" => "warning".yellow(),
-            "error" => "warning".red(),
-            _ => "success".green(),
-        };
+    fn format_result(&self, result: &RuleResult) -> String {
+        let dots = self.dot_leader(&result.rule_name, &result.status);
 
-        println!("{} {} {}", rule_name.cyan(), dots, result_with_color);
+        let mut output = format!(
+            "{} {} {}",
+            result.rule_name.cyan(),
+            dots,
+            result.status.as_colored_str()
+        );
 
-        if result == "warning" || result == "error" {
-            self.print_failure_message(rule);
+        if matches!(result.status, Status::Warning | Status::Error) {
+            output.push_str(&format!(
+                "\n    ↳ {}",
+                result.message.as_ref().unwrap().yellow()
+            ));
         }
+
+        output
     }
 
-    fn print_failure_message(&self, rule: &RuleConfig) {
-        match rule.level() {
-            Level::Warn => println!("    ↳ {}", rule.message().yellow()),
-            Level::Error => println!("    ↳ {}", rule.message().red()),
-        }
-    }
-    fn dot_leader(&self, rule_name: &str, result: &str) -> String {
+    fn dot_leader(&self, rule_name: &str, status: &Status) -> String {
         let dots = self
             .width
-            .saturating_sub(rule_name.len() + result.len() + 2);
+            .saturating_sub(rule_name.len() + status.to_string().len() + 2);
 
         return ".".repeat(dots);
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn formats_success_without_message() {
+        let printer = Printer::new();
+
+        let result = RuleResult {
+            rule_name: "test".into(),
+            status: Status::Success,
+            message: None,
+        };
+
+        let output = printer.format_result(&result);
+
+        println!("{}", output);
+
+        assert!(output.contains("test"));
+        assert!(output.contains("Success"));
+    }
+
+    #[test]
+    fn formats_warning_with_message() {
+        let printer = Printer::new();
+
+        let result = RuleResult {
+            rule_name: "test".into(),
+            status: Status::Warning,
+            message: Some("message".to_string()),
+        };
+
+        let output = printer.format_result(&result);
+
+        println!("{}", output);
+
+        assert!(output.contains("test"));
+        assert!(output.contains("Warning"));
+        assert!(output.contains("message"));
+    }
+
+    #[test]
+    fn formats_error_with_message() {
+        let printer = Printer::new();
+
+        let result = RuleResult {
+            rule_name: "test".into(),
+            status: Status::Error,
+            message: Some("message".to_string()),
+        };
+
+        let output = printer.format_result(&result);
+
+        println!("{}", output);
+
+        assert!(output.contains("test"));
+        assert!(output.contains("Error"));
+        assert!(output.contains("message"));
     }
 }

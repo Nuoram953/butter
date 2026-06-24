@@ -4,6 +4,7 @@ use log::debug;
 use crate::{
     config::{self},
     output::printer::Printer,
+    rules::result::to_result,
 };
 
 pub fn handle(branch: Option<&str>) -> Result<()> {
@@ -14,9 +15,11 @@ pub fn handle(branch: Option<&str>) -> Result<()> {
 
         let passed = rule.evaluate(branch);
 
+        let result = to_result(&rule, passed);
+
         let printer = Printer::new();
 
-        printer.print_result(&rule, passed);
+        printer.print_result(result);
     }
 
     Ok(())
