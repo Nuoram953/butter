@@ -3,7 +3,10 @@ use directories::ProjectDirs;
 use serde::Deserialize;
 use std::{fs, io, path::PathBuf};
 
-use crate::rules::{Level, file::FileRuleConfig};
+use crate::{
+    git,
+    rules::{Level, file::FileRuleConfig},
+};
 
 const APP_NAME: &str = "butter";
 const RULES_FILE: &str = "rules.yml";
@@ -42,12 +45,6 @@ impl RuleConfig {
     pub fn level(&self) -> &Level {
         match self {
             RuleConfig::File(r) => &r.level,
-        }
-    }
-
-    pub fn rule_type(&self) -> &str {
-        match self {
-            RuleConfig::File(_) => &"FILE",
         }
     }
 }
