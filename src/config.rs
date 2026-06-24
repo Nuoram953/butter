@@ -21,9 +21,9 @@ pub enum RuleConfig {
 }
 
 impl RuleConfig {
-    pub fn evaluate(&self) -> bool {
+    pub fn evaluate(&self, branch: Option<&str>) -> bool {
         match self {
-            RuleConfig::File(r) => r.evaluate(),
+            RuleConfig::File(r) => r.evaluate(branch),
         }
     }
 
