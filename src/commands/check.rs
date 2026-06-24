@@ -1,5 +1,5 @@
 use anyhow::{Ok, Result};
-use log::debug;
+use log::info;
 
 use crate::{
     config::{self},
@@ -11,7 +11,7 @@ pub fn handle(branch: Option<&str>) -> Result<()> {
     let config = config::load_config()?;
 
     for rule in config.rules {
-        debug!("Checking for {:#?}", rule);
+        info!("Checking for {:#?}", rule);
 
         let passed = rule.evaluate(branch);
 
