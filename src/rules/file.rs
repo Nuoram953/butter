@@ -2,10 +2,7 @@ use std::path::PathBuf;
 
 use serde::Deserialize;
 
-use crate::{
-    git,
-    rules::{Level, result::RuleResult},
-};
+use crate::{config, git, rules::Level};
 
 #[derive(Debug, Deserialize)]
 pub struct FileRuleConfig {
@@ -51,7 +48,8 @@ impl FileRuleConfig {
     }
 
     pub fn evaluate(&self, branch: Option<&str>) -> bool {
-        let files = git::get_changed_files(branch.unwrap_or("main"));
+        let config = config::load_config();
+        let files = git::get_changed_files(branch.unwrap_or(&config.unwrap().default_branch));
         self.evaluate_files(&files)
     }
 }
