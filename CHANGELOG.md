@@ -1,3 +1,10 @@
+# [1.2.0-beta.1](https://github.com/Nuoram953/butter/compare/v1.1.0...v1.2.0-beta.1) (2026-06-24)
+
+
+### Features
+
+* flag in `check` to target base branch ([0526b35](https://github.com/Nuoram953/butter/commit/0526b35724f3d5b003c3c5560a239f42a5e6ba0b))
+
 # [1.1.0](https://github.com/Nuoram953/butter/compare/v1.0.0...v1.1.0) (2026-06-20)
 
 
