@@ -2,7 +2,10 @@ use std::path::PathBuf;
 
 use serde::Deserialize;
 
-use crate::{git, rules::Level};
+use crate::{
+    git,
+    rules::{Level, result::RuleResult},
+};
 
 #[derive(Debug, Deserialize)]
 pub struct FileRuleConfig {
