@@ -1,16 +1,27 @@
 use std::path::PathBuf;
 
+use schemars::JsonSchema;
 use serde::Deserialize;
 
 use crate::{config, git, rules::Level};
 
-#[derive(Debug, Deserialize)]
+/// Fails if any changed file matches a `when` pattern unless a changed file also matches a corresponding `unless` pattern (e.g. "editing `src` requires also editing `test`").
+#[derive(Debug, Deserialize, JsonSchema)]
 pub struct FileRuleConfig {
+    /// Name of the rule.
     pub name: String,
+
+    /// Pattern if any changed file path contains one of these, the rule is triggered.
     pub when: Vec<String>,
+
+    /// If the rule is triggered, at least one changed file must match one of these for the rule to pass. Defaults to empty if omitted.
     #[serde(default)]
     pub unless: Vec<String>,
+
+    /// Message displayed when the rule fails.
     pub message: String,
+
+    /// Severity of the rule.
     pub level: Level,
 }
 
