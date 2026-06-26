@@ -62,3 +62,37 @@ rules:
     message: "Deploy script has changed. Did you update the traffic script?"
     level: warn
 ```
+
+## Rules
+
+<!-- SCHEMA:file:START -->
+### `file`
+
+Fails if any changed file matches a `when` pattern unless a changed file also matches a corresponding `unless` pattern (e.g. "editing `src` requires also editing `test`").
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `level` | string (`warn, error`) | yes | Severity of the rule. |
+| `message` | string | yes | Message displayed when the rule fails. |
+| `name` | string | yes | Name of the rule. |
+| `unless` | array | no | If the rule is triggered, at least one changed file must match one of these for the rule to pass. Defaults to empty if omitted. |
+| `when` | array | yes | Pattern if any changed file path contains one of these, the rule is triggered. |
+
+
+<!-- SCHEMA:file:END -->
+
+<!-- SCHEMA:file_name:START -->
+### `file_name`
+
+Checks that filenames in a given directory match a naming pattern (regex).
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `directory` | string | yes | Directory to search. |
+| `level` | string (`warn, error`) | yes | Severity of the rule. |
+| `message` | string | yes | Message displayed when the rule fails. |
+| `name` | string | yes | Name of the rule. |
+| `pattern` | string | yes | Regular expression used to match files. |
+
+
+<!-- SCHEMA:file_name:END -->
