@@ -23,3 +23,7 @@ members = [
     ".",
     "xtask",
 ]
+
+[lib]
+path = "src/lib.rs"
+test = false
