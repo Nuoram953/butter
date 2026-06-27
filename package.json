@@ -1,6 +1,6 @@
 {
   "name": "butter",
-  "version": "1.0.1",
+  "version": "1.2.3",
   "private": true,
   "devDependencies": {
     "@semantic-release/changelog": "^6.0.0",

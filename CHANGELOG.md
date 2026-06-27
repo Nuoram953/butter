@@ -1,3 +1,10 @@
+## [1.2.3](https://github.com/Nuoram953/butter/compare/v1.2.2...v1.2.3) (2026-06-27)
+
+
+### Bug Fixes
+
+* missing package.json in release/git ([3b778c2](https://github.com/Nuoram953/butter/commit/3b778c26318044bcc51da816c6d522328e5a2924))
+
 ## [1.2.2](https://github.com/Nuoram953/butter/compare/v1.2.1...v1.2.2) (2026-06-27)
 
 
