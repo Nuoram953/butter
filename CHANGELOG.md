@@ -1,3 +1,10 @@
+## [1.2.2](https://github.com/Nuoram953/butter/compare/v1.2.1...v1.2.2) (2026-06-27)
+
+
+### Bug Fixes
+
+* release workflow not updating package.json version ([2c3708b](https://github.com/Nuoram953/butter/commit/2c3708b6d7e86c9a47d8e394bcb2224e59bde552))
+
 ## [1.2.1](https://github.com/Nuoram953/butter/compare/v1.2.0...v1.2.1) (2026-06-27)
 
 
