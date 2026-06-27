@@ -1,3 +1,11 @@
+## [1.2.1](https://github.com/Nuoram953/butter/compare/v1.2.0...v1.2.1) (2026-06-27)
+
+
+### Bug Fixes
+
+* remove file added by accident ([f212102](https://github.com/Nuoram953/butter/commit/f21210239279e8386bb3618843dbad0ad70a6568))
+* update release workflow ([bdeac66](https://github.com/Nuoram953/butter/commit/bdeac6642aef1de6adefc1db3fcff450bb37f854))
+
 # [1.2.0](https://github.com/Nuoram953/butter/compare/v1.1.0...v1.2.0) (2026-06-27)
 
 
