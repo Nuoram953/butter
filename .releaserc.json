@@ -12,7 +12,7 @@
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "sed -i \"0,/^version = /s//version = \\\"${nextRelease.version}\\\"/\" Cargo.toml && cargo run -p xtask"
+        "prepareCmd": "cargo set-version ${nextRelease.version} && cargo run -p xtask"
       }
     ],
     [
