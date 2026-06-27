@@ -1,3 +1,10 @@
+## [1.2.4](https://github.com/Nuoram953/butter/compare/v1.2.3...v1.2.4) (2026-06-27)
+
+
+### Bug Fixes
+
+* missing `file_name` rule configuration ([7c7fa05](https://github.com/Nuoram953/butter/commit/7c7fa05dcc00d0736bb62a94ff0042abe55a3dfb))
+
 ## [1.2.3](https://github.com/Nuoram953/butter/compare/v1.2.2...v1.2.3) (2026-06-27)
 
 
