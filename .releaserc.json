@@ -12,7 +12,7 @@
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "cargo set-version ${nextRelease.version} && cargo run -p xtask"
+        "prepareCmd": "cargo set-version ${nextRelease.version} && npm pkg set version=${nextRelease.version} && cargo run -p xtask"
       }
     ],
     [
