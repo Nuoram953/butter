@@ -1,3 +1,12 @@
+# [1.2.0](https://github.com/Nuoram953/butter/compare/v1.1.0...v1.2.0) (2026-06-27)
+
+
+### Features
+
+* add `default_branch` option in config ([bff4e1e](https://github.com/Nuoram953/butter/commit/bff4e1e37ab6bf48379703c2e260b92eef2029eb))
+* flag in `check` to target base branch ([6b0387d](https://github.com/Nuoram953/butter/commit/6b0387dc0a58e939c3e454bbdce7121ea37571cd))
+* rule `file_name` ([35fd113](https://github.com/Nuoram953/butter/commit/35fd113fb010b2b75da1dbd7561e70ba7062f4ad))
+
 # [1.2.0-beta.1](https://github.com/Nuoram953/butter/compare/v1.1.0...v1.2.0-beta.1) (2026-06-24)
 
 
