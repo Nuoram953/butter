@@ -1,3 +1,5 @@
+use std::process;
+
 use anyhow::{Ok, Result};
 use log::{debug, info};
 
@@ -41,6 +43,10 @@ pub fn handle(branch: Option<&str>) -> Result<()> {
     );
 
     printer.print_end_results(rule_results);
+
+    if failed > 0 {
+        process::exit(1)
+    }
 
     Ok(())
 }

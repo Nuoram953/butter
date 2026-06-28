@@ -1,6 +1,7 @@
 use std::process;
 
 use clap::{Parser, Subcommand};
+use log::error;
 
 mod commands;
 mod config;
@@ -30,7 +31,7 @@ fn main() -> anyhow::Result<()> {
     env_logger::init();
 
     if !git::is_git_repo() {
-        println!("not a git repo");
+        error!("butter needs to run from a git repo");
         process::exit(1)
     }
 
