@@ -3,7 +3,10 @@ use directories::ProjectDirs;
 use serde::Deserialize;
 use std::{fs, io, path::PathBuf};
 
-use crate::rules::{file::FileRuleConfig, file_name::FileNameRuleConfig, result::RuleResult};
+use crate::rules::{
+    file::FileRuleConfig, file_group::FileGroupRuleConfig, file_name::FileNameRuleConfig,
+    result::RuleResult,
+};
 
 const APP_NAME: &str = "butter";
 const RULES_FILE: &str = "rules.yml";
@@ -22,6 +25,9 @@ pub enum RuleConfig {
 
     #[serde(rename = "file_name")]
     FileName(FileNameRuleConfig),
+
+    #[serde(rename = "file_group")]
+    FileGroup(FileGroupRuleConfig),
 }
 
 impl RuleConfig {
@@ -29,6 +35,7 @@ impl RuleConfig {
         match self {
             RuleConfig::File(r) => r.evaluate(branch),
             RuleConfig::FileName(r) => r.evaluate(branch),
+            RuleConfig::FileGroup(r) => r.evaluate(branch),
         }
     }
 }
