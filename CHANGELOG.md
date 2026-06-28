@@ -1,3 +1,11 @@
+# [1.4.0](https://github.com/Nuoram953/butter/compare/v1.3.0...v1.4.0) (2026-06-28)
+
+
+### Features
+
+* `get_changed_files` includes stage/unstage changes ([d721397](https://github.com/Nuoram953/butter/commit/d72139730ae54e61747368a8c71ce18f9117c391))
+* add `file_group` rule ([a44eec3](https://github.com/Nuoram953/butter/commit/a44eec3053ee1035b7634ca6412b1b1d057ac2d7))
+
 # [1.3.0](https://github.com/Nuoram953/butter/compare/v1.2.4...v1.3.0) (2026-06-28)
 
 
