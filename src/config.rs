@@ -3,7 +3,7 @@ use directories::ProjectDirs;
 use serde::Deserialize;
 use std::{fs, io, path::PathBuf};
 
-use crate::rules::{Level, file::FileRuleConfig, file_name::FileNameRuleConfig};
+use crate::rules::{file::FileRuleConfig, file_name::FileNameRuleConfig, result::RuleResult};
 
 const APP_NAME: &str = "butter";
 const RULES_FILE: &str = "rules.yml";
@@ -25,31 +25,10 @@ pub enum RuleConfig {
 }
 
 impl RuleConfig {
-    pub fn evaluate(&self, branch: Option<&str>) -> bool {
+    pub fn evaluate(&self, branch: Option<&str>) -> RuleResult {
         match self {
             RuleConfig::File(r) => r.evaluate(branch),
             RuleConfig::FileName(r) => r.evaluate(branch),
-        }
-    }
-
-    pub fn name(&self) -> &str {
-        match self {
-            RuleConfig::File(r) => &r.name,
-            RuleConfig::FileName(r) => &r.name,
-        }
-    }
-
-    pub fn message(&self) -> &str {
-        match self {
-            RuleConfig::File(r) => &r.message,
-            RuleConfig::FileName(r) => &r.message,
-        }
-    }
-
-    pub fn level(&self) -> &Level {
-        match self {
-            RuleConfig::File(r) => &r.level,
-            RuleConfig::FileName(r) => &r.level,
         }
     }
 }

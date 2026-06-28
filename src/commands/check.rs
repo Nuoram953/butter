@@ -4,23 +4,25 @@ use log::info;
 use crate::{
     config::{self},
     output::printer::Printer,
-    rules::result::to_result,
+    rules::result::RuleResult,
 };
 
 pub fn handle(branch: Option<&str>) -> Result<()> {
+    let mut rule_results: Vec<RuleResult> = Vec::new();
     let config = config::load_config()?;
+    let printer = Printer::new();
 
     for rule in config.rules {
         info!("Checking for {:#?}", rule);
 
-        let passed = rule.evaluate(branch);
+        let result = rule.evaluate(branch);
 
-        let result = to_result(&rule, passed);
+        printer.print_rule_result(&result);
 
-        let printer = Printer::new();
-
-        printer.print_result(result);
+        rule_results.push(result);
     }
+
+    printer.print_end_results(rule_results);
 
     Ok(())
 }

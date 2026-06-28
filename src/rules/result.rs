@@ -1,4 +1,6 @@
-use crate::{config::RuleConfig, rules::Level};
+use std::path::PathBuf;
+
+use crate::rules::Level;
 use colored::{ColoredString, Colorize};
 use strum_macros::{Display, EnumString};
 
@@ -19,28 +21,26 @@ impl Status {
     }
 }
 
-pub struct RuleResult {
-    pub rule_name: String,
-    pub message: Option<String>,
-    pub status: Status,
+#[derive(Debug)]
+pub struct Failure {
+    pub file: Option<PathBuf>,
+    pub reason: String,
 }
 
-pub fn to_result(rule: &RuleConfig, passed: bool) -> RuleResult {
-    let status = match (passed, rule.level()) {
-        (true, _) => Status::Success,
-        (false, Level::Warn) => Status::Warning,
-        (false, Level::Error) => Status::Error,
-    };
+#[derive(Debug)]
+pub struct RuleResult {
+    pub name: String,
+    pub status: Status,
+    pub failures: Vec<Failure>,
+}
 
-    let message = if matches!(status, Status::Success) {
-        None
+pub fn get_rule_result_status(failures: usize, level: &Level) -> Status {
+    if failures == 0 {
+        Status::Success
     } else {
-        Some(rule.message().to_string())
-    };
-
-    RuleResult {
-        rule_name: rule.name().to_string(),
-        status,
-        message,
+        match level {
+            Level::Warn => Status::Warning,
+            Level::Error => Status::Error,
+        }
     }
 }

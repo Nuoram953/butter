@@ -3,7 +3,13 @@ use std::path::PathBuf;
 use schemars::JsonSchema;
 use serde::Deserialize;
 
-use crate::{config, git, rules::Level};
+use crate::{
+    config, git,
+    rules::{
+        Level,
+        result::{Failure, RuleResult, get_rule_result_status},
+    },
+};
 
 /// Fails if any changed file matches a `when` pattern unless a changed file also matches a corresponding `unless` pattern (e.g. "editing `src` requires also editing `test`").
 #[derive(Debug, Deserialize, JsonSchema)]
@@ -38,27 +44,36 @@ impl Default for FileRuleConfig {
 }
 
 impl FileRuleConfig {
-    pub fn evaluate_files(&self, files: &[PathBuf]) -> bool {
-        let file_match_when = files.iter().any(|file| {
-            self.when
-                .iter()
-                .any(|pattern| file.to_str().unwrap_or("").contains(pattern))
-        });
+    pub fn evaluate_files(&self, files: &[PathBuf]) -> RuleResult {
+        let mut failures: Vec<Failure> = Vec::new();
 
-        if !file_match_when {
-            return true;
-        }
-
-        let file_match_unless = files.iter().any(|file| {
+        let any_file_matches_unless = files.iter().any(|file| {
             self.unless
                 .iter()
                 .any(|pattern| file.to_str().unwrap_or("").contains(pattern))
         });
 
-        file_match_unless
+        files.iter().for_each(|file| {
+            let match_when_pattern = self
+                .when
+                .iter()
+                .any(|pattern| file.to_str().unwrap_or("").contains(pattern));
+
+            if match_when_pattern && !any_file_matches_unless {
+                failures.push(Failure {
+                    file: Some(file.clone()),
+                    reason: String::from(&self.message),
+                });
+            }
+        });
+        RuleResult {
+            name: self.name.clone(),
+            status: get_rule_result_status(failures.len(), &self.level),
+            failures,
+        }
     }
 
-    pub fn evaluate(&self, branch: Option<&str>) -> bool {
+    pub fn evaluate(&self, branch: Option<&str>) -> RuleResult {
         let config = config::load_config();
         let files = git::get_changed_files(branch.unwrap_or(&config.unwrap().default_branch));
         self.evaluate_files(&files)
@@ -67,6 +82,8 @@ impl FileRuleConfig {
 
 #[cfg(test)]
 mod tests {
+    use crate::rules::result::Status;
+
     use super::*;
     use std::path::PathBuf;
 
@@ -80,7 +97,10 @@ mod tests {
 
         let files = vec![PathBuf::from("README.md")];
 
-        assert!(rule.evaluate_files(&files));
+        let result = rule.evaluate_files(&files);
+
+        assert_eq!(result.status, Status::Success);
+        assert_eq!(result.failures.len(), 0);
     }
 
     #[test]
@@ -93,19 +113,25 @@ mod tests {
 
         let files = vec![PathBuf::from("src/main.rs")];
 
-        assert!(!rule.evaluate_files(&files));
+        let result = rule.evaluate_files(&files);
+
+        assert_eq!(result.status, Status::Warning);
+        assert_eq!(result.failures.len(), 1);
     }
 
     #[test]
     fn returns_true_when_both_when_and_unless_match() {
         let rule = FileRuleConfig {
-            when: vec!["src".into()],
-            unless: vec!["test".into()],
+            when: vec!["main.rs".into()],
+            unless: vec!["data.txt".into()],
             ..Default::default()
         };
 
         let files = vec![PathBuf::from("src/main.rs"), PathBuf::from("test/data.txt")];
 
-        assert!(rule.evaluate_files(&files));
+        let result = rule.evaluate_files(&files);
+
+        assert_eq!(result.status, Status::Success);
+        assert_eq!(result.failures.len(), 0);
     }
 }

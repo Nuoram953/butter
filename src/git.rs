@@ -18,5 +18,5 @@ pub fn is_git_repo() -> bool {
         .output()
         .expect("not a git project");
 
-    return output.stderr.len() == 0;
+    output.stderr.is_empty()
 }
