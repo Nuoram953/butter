@@ -5,33 +5,75 @@ pub struct Printer {
     width: usize,
 }
 
+impl Default for Printer {
+    fn default() -> Self {
+        Self { width: 80 }
+    }
+}
+
 impl Printer {
     pub fn new() -> Self {
         Self { width: 80 }
     }
 
-    pub fn print_result(&self, result: RuleResult) {
-        println!("{}", self.format_result(&result))
+    pub fn print_rule_result(&self, result: &RuleResult) {
+        println!("{}", self.format_result(result))
     }
 
     fn format_result(&self, result: &RuleResult) -> String {
-        let dots = self.dot_leader(&result.rule_name, &result.status);
+        let dots = self.dot_leader(&result.name, &result.status);
 
-        let mut output = format!(
+        let output = format!(
             "{} {} {}",
-            result.rule_name.cyan(),
+            result.name.cyan(),
             dots,
             result.status.as_colored_str()
         );
 
-        if matches!(result.status, Status::Warning | Status::Error) {
-            output.push_str(&format!(
-                "\n    ↳ {}",
-                result.message.as_ref().unwrap().yellow()
-            ));
+        output
+    }
+
+    pub fn print_end_results(&self, results: Vec<RuleResult>) {
+        let failures: Vec<&RuleResult> = results
+            .iter()
+            .filter(|result| result.status != Status::Success)
+            .collect();
+
+        if failures.is_empty() {
+            return;
         }
 
-        output
+        println!("\n{}", "=".repeat(self.width));
+        println!("{}", "FAILURES".bold());
+        println!("{}", "=".repeat(self.width));
+
+        for result in &failures {
+            println!(
+                "\n{} {}",
+                result.name.cyan(),
+                result.status.as_colored_str()
+            );
+
+            for (index, failure) in result.failures.iter().enumerate() {
+                let file_display = failure
+                    .file
+                    .as_ref()
+                    .and_then(|f| f.to_str())
+                    .unwrap_or("<unknown file>");
+
+                println!("  {}. {}", index + 1, file_display);
+                println!("     ↳ {}", failure.reason.yellow());
+            }
+        }
+
+        println!("\n{}", "-".repeat(self.width));
+        let total_failures: usize = failures.iter().map(|r| r.failures.len()).sum();
+        println!(
+            "{} rule(s) failed, {} failure(s) total",
+            failures.len(),
+            total_failures
+        );
+        println!("{}", "=".repeat(self.width));
     }
 
     fn dot_leader(&self, rule_name: &str, status: &Status) -> String {
@@ -39,7 +81,7 @@ impl Printer {
             .width
             .saturating_sub(rule_name.len() + status.to_string().len() + 2);
 
-        return ".".repeat(dots);
+        ".".repeat(dots)
     }
 }
 
@@ -52,9 +94,9 @@ mod tests {
         let printer = Printer::new();
 
         let result = RuleResult {
-            rule_name: "test".into(),
+            name: "test".into(),
             status: Status::Success,
-            message: None,
+            failures: Vec::new(),
         };
 
         let output = printer.format_result(&result);
@@ -70,9 +112,9 @@ mod tests {
         let printer = Printer::new();
 
         let result = RuleResult {
-            rule_name: "test".into(),
+            name: "test".into(),
             status: Status::Warning,
-            message: Some("message".to_string()),
+            failures: Vec::new(),
         };
 
         let output = printer.format_result(&result);
@@ -81,7 +123,6 @@ mod tests {
 
         assert!(output.contains("test"));
         assert!(output.contains("Warning"));
-        assert!(output.contains("message"));
     }
 
     #[test]
@@ -89,9 +130,9 @@ mod tests {
         let printer = Printer::new();
 
         let result = RuleResult {
-            rule_name: "test".into(),
+            name: "test".into(),
             status: Status::Error,
-            message: Some("message".to_string()),
+            failures: Vec::new(),
         };
 
         let output = printer.format_result(&result);
@@ -100,6 +141,5 @@ mod tests {
 
         assert!(output.contains("test"));
         assert!(output.contains("Error"));
-        assert!(output.contains("message"));
     }
 }
