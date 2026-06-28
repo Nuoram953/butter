@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/Nuoram953/butter/compare/v1.2.4...v1.3.0) (2026-06-28)
+
+
+### Features
+
+* add proper rule result ([919d39f](https://github.com/Nuoram953/butter/commit/919d39fdc73586fe835ad1fd8a5e8c9655115a37))
+
 ## [1.2.4](https://github.com/Nuoram953/butter/compare/v1.2.3...v1.2.4) (2026-06-27)
 
 
