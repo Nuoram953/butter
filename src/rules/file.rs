@@ -1,5 +1,6 @@
 use std::path::PathBuf;
 
+use log::debug;
 use schemars::JsonSchema;
 use serde::Deserialize;
 
@@ -60,6 +61,10 @@ impl FileRuleConfig {
                 .any(|pattern| file.to_str().unwrap_or("").contains(pattern));
 
             if match_when_pattern && !any_file_matches_unless {
+                debug!(
+                    "{:?} match 'when' patterns {:?} but not 'unless' patterns {:?}",
+                    file, self.when, self.unless
+                );
                 failures.push(Failure {
                     file: Some(file.clone()),
                     reason: String::from(&self.message),
