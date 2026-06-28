@@ -1,25 +1,40 @@
 use std::{path::PathBuf, process::Command};
 
-use log::{debug, info};
+use log::info;
 
 pub fn get_changed_files(base: &str) -> Vec<PathBuf> {
-    let output = Command::new("git")
+    let diff = Command::new("git")
         .args(["diff", "--name-only", &format!("{base}...HEAD")])
         .output()
         .expect("git diff failed");
 
-    let files: Vec<PathBuf> = String::from_utf8_lossy(&output.stdout)
+    let mut files: Vec<PathBuf> = String::from_utf8_lossy(&diff.stdout)
         .lines()
         .map(PathBuf::from)
         .collect();
 
-    info!("{} files changed in diff {}...HEAD", files.len(), base);
+    let status = Command::new("git")
+        .args(["status", "--porcelain"])
+        .output()
+        .expect("git status failed");
 
-    debug!("files changed {:?}", files);
+    for line in String::from_utf8_lossy(&status.stdout).lines() {
+        if let Some(path) = line.get(3..) {
+            files.push(PathBuf::from(path));
+        }
+    }
+
+    info!(
+        "{} files changed in diff {}...HEAD incuding staged/unstaged",
+        files.len(),
+        base
+    );
+
+    files.sort();
+    files.dedup();
 
     files
 }
-
 pub fn is_git_repo() -> bool {
     let output = Command::new("git")
         .args(["rev-parse", "--git-dir"])
