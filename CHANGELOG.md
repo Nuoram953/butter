@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/Nuoram953/butter/compare/v1.4.0...v1.4.1) (2026-06-28)
+
+
+### Bug Fixes
+
+* `check` command not returning error when a rule fails ([db80a51](https://github.com/Nuoram953/butter/commit/db80a51bbd1f802a44dbd3f46e92467be65eb21f))
+
 # [1.4.0](https://github.com/Nuoram953/butter/compare/v1.3.0...v1.4.0) (2026-06-28)
 
 
