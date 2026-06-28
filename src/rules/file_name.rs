@@ -1,3 +1,4 @@
+use log::debug;
 use regex::Regex;
 use schemars::JsonSchema;
 use std::path::{Path, PathBuf};
@@ -56,6 +57,7 @@ impl FileNameRuleConfig {
                     .and_then(|s| s.to_str())
                     .unwrap_or("");
                 if !re.is_match(stem) {
+                    debug!("{:?} didn't match the pattern {}", file, self.pattern);
                     failures.push(Failure {
                         file: Some(file.clone()),
                         reason: String::from(&self.message),

@@ -1,5 +1,5 @@
 use anyhow::{Ok, Result};
-use log::info;
+use log::{debug, info};
 
 use crate::{
     config::{self},
@@ -12,15 +12,33 @@ pub fn handle(branch: Option<&str>) -> Result<()> {
     let config = config::load_config()?;
     let printer = Printer::new();
 
+    info!(
+        "Evaluating {} rule(s) against branch {:?}",
+        config.rules.len(),
+        branch
+    );
+
     for rule in config.rules {
-        info!("Checking for {:#?}", rule);
+        debug!("Checking rule {:#?}", rule);
 
         let result = rule.evaluate(branch);
+
+        debug!("Rule result {:?}", result);
 
         printer.print_rule_result(&result);
 
         rule_results.push(result);
     }
+
+    let failed = rule_results
+        .iter()
+        .filter(|r| r.status != crate::rules::result::Status::Success)
+        .count();
+    info!(
+        "Done: {} rule(s) flagged out of {}",
+        failed,
+        rule_results.len()
+    );
 
     printer.print_end_results(rule_results);
 
