@@ -2,6 +2,7 @@ use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
 pub mod file;
+pub mod file_group;
 pub mod file_name;
 pub mod result;
 

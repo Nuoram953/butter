@@ -44,3 +44,11 @@ pub fn get_rule_result_status(failures: usize, level: &Level) -> Status {
         }
     }
 }
+
+pub fn render_message(template: &str, vars: &[(&str, &str)]) -> String {
+    let mut result = template.to_string();
+    for (key, value) in vars {
+        result = result.replace(&format!("{{{key}}}"), value);
+    }
+    result
+}
