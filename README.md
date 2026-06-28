@@ -96,3 +96,18 @@ Checks that filenames in a given directory match a naming pattern (regex).
 
 
 <!-- SCHEMA:file_name:END -->
+
+<!-- SCHEMA:file_group:START -->
+### `file_group`
+
+Checks that all files in group are modified.
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `group` | array | yes | List of files that all needs to be changed at the same time. |
+| `level` | string (`warn, error`) | yes | Severity of the rule. |
+| `message` | string | yes | Message displayed when the rule fails. |
+| `name` | string | yes | Name of the rule. |
+
+
+<!-- SCHEMA:file_group:END -->

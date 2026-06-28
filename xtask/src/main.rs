@@ -1,6 +1,7 @@
-use butter::rules::{file::FileRuleConfig, file_name::FileNameRuleConfig};
-use schemars::{JsonSchema, schema_for};
-use serde::Serialize;
+use butter::rules::{
+    file::FileRuleConfig, file_group::FileGroupRuleConfig, file_name::FileNameRuleConfig,
+};
+use schemars::schema_for;
 use serde_json::Value;
 use std::fs;
 
@@ -90,10 +91,14 @@ fn main() -> std::io::Result<()> {
     update_readme_section("README.md", "file", &md)?;
 
     let schema = schema_for!(FileNameRuleConfig);
-
-    println!("{}", serde_json::to_string_pretty(&schema).unwrap());
     let value: Value = serde_json::to_value(&schema).unwrap();
     let md = schema_to_markdown(&value, "file_name");
     update_readme_section("README.md", "file_name", &md)?;
+
+    let schema = schema_for!(FileGroupRuleConfig);
+    let value: Value = serde_json::to_value(&schema).unwrap();
+    let md = schema_to_markdown(&value, "file_group");
+    update_readme_section("README.md", "file_group", &md)?;
+
     Ok(())
 }

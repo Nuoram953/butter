@@ -17,7 +17,7 @@ pub struct FileGroupRuleConfig {
     /// Name of the rule.
     pub name: String,
 
-    /// List to file that all needs to be changed at the same time.
+    /// List of files that all needs to be changed at the same time.
     pub group: Vec<String>,
 
     /// Message displayed when the rule fails.
