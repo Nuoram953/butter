@@ -23,7 +23,8 @@
           "Cargo.toml",
           "Cargo.lock",
           "README.md",
-          "package.json"
+          "package.json",
+          "xtask/Cargo.toml"
         ],
         "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
       }
