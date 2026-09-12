@@ -5,6 +5,7 @@ pub mod file;
 pub mod file_content;
 pub mod file_group;
 pub mod file_name;
+pub mod removed_variable;
 pub mod result;
 
 #[derive(Debug, Serialize, Deserialize, JsonSchema)]

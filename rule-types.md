@@ -118,17 +118,52 @@ For cases where touching all the right files isn't enough — you also want to c
 
 ---
 
+## `removed_variable`
+
+Parses the git diff for deleted variable declarations and ensures the removed variables are no longer referenced in the file. This prevents accidental leftovers during refactorings or feature flag retirements.
+
+If a variable was removed on a `-` line but re-declared on a `+` line (e.g. `let x` refactored to `const x`), it is ignored as a safe modification rather than a deletion.
+
+**Fields**
+
+| Field     | Required | Description                                                                                                                                                                          |
+| --------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `name`    | yes      | Unique identifier for the rule                                                                                                                                                       |
+| `type`    | yes      | `removed_variable`                                                                                                                                                                   |
+| `when`    | no       | List of path substrings to filter files (e.g. `[".js", ".ts"]`). If omitted or empty, checks all changed files                                                                      |
+| `pattern` | no       | Regex with capture group 1 to extract variable names from diff lines. Defaults to `(?:const\|let\|var\|function)\s+([a-zA-Z_$][a-zA-Z0-9_$]*)`                                      |
+| `message` | yes      | Message displayed when leftover references are found. Supports `{{variable}}`, `{{file}}`, `{{line}}`, and `{{line_content}}`                                                        |
+| `level`   | yes      | `warn` or `error`                                                                                                                                                                    |
+
+**Example**
+
+```yaml
+- name: no_orphaned_removed_variables
+  type: removed_variable
+  when:
+    - .js
+    - .ts
+  message: "Variable '{{variable}}' was removed, but is still referenced on line {{line}} in {{file}}"
+  level: error
+```
+
+**Use when:** cleaning up dead code, removing deprecated feature flags, or refactoring modules to ensure you haven't left stray usages behind.
+
+---
+
 ## Field Summary Across Types
 
-| Field     | `file` | `file_group` | `file_content` |
-| --------- | ------ | ------------ | -------------- |
-| `name`    | ✓      | ✓            | ✓              |
-| `type`    | ✓      | ✓            | ✓              |
-| `when`    | ✓      | —            | —              |
-| `group`   | —      | ✓            | ✓              |
-| `require` | —      | ✓            | ✓              |
-| `extract` | —      | —            | ✓              |
-| `always`  | —      | —            | ✓              |
-| `message` | ✓      | ✓            | ✓              |
-| `level`   | ✓      | ✓            | ✓              |
+| Field     | `file` | `file_group` | `file_content` | `removed_variable` |
+| --------- | ------ | ------------ | -------------- | ------------------ |
+| `name`    | ✓      | ✓            | ✓              | ✓                  |
+| `type`    | ✓      | ✓            | ✓              | ✓                  |
+| `when`    | ✓      | —            | —              | ✓                  |
+| `group`   | —      | ✓            | ✓              | —                  |
+| `require` | —      | ✓            | ✓              | —                  |
+| `extract` | —      | —            | ✓              | —                  |
+| `pattern` | —      | —            | —              | ✓                  |
+| `always`  | —      | —            | ✓              | —                  |
+| `message` | ✓      | ✓            | ✓              | ✓                  |
+| `level`   | ✓      | ✓            | ✓              | ✓                  |
+
 

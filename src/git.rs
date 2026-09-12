@@ -43,3 +43,28 @@ pub fn is_git_repo() -> bool {
 
     output.stderr.is_empty()
 }
+
+pub fn get_file_diff(base: &str, file: &std::path::Path) -> String {
+    let file_str = file.to_str().unwrap_or("");
+
+    let diff_branch = Command::new("git")
+        .args(["diff", "-U0", &format!("{base}...HEAD"), "--", file_str])
+        .output()
+        .map(|o| String::from_utf8_lossy(&o.stdout).to_string())
+        .unwrap_or_default();
+
+    let diff_working = Command::new("git")
+        .args(["diff", "-U0", "HEAD", "--", file_str])
+        .output()
+        .map(|o| String::from_utf8_lossy(&o.stdout).to_string())
+        .unwrap_or_default();
+
+    if diff_branch.is_empty() {
+        diff_working
+    } else if diff_working.is_empty() {
+        diff_branch
+    } else {
+        format!("{diff_branch}\n{diff_working}")
+    }
+}
+

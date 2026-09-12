@@ -129,3 +129,19 @@ Verifies consistency of extracted values across a group of files.
 
 
 <!-- SCHEMA:file_content:END -->
+
+<!-- SCHEMA:removed_variable:START -->
+### `removed_variable`
+
+Checks that variables whose declarations were removed in the git diff are no longer referenced in the file.
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `level` | string (`warn, error`) | yes | Severity of the rule. |
+| `message` | string | yes | Message displayed when the rule fails. Supports {{variable}}, {{file}}, {{line}}, and {{line_content}} placeholders. |
+| `name` | string | yes | Name of the rule. |
+| `pattern` | string | no | Regular expression used to extract variable names from removed lines. Must contain at least one capture group for the variable name. Defaults to matching JS/TS const, let, var, and function declarations. |
+| `when` | array | no | Patterns to match changed file paths (e.g. [".js", ".ts"]). If empty, checks all changed files. |
+
+
+<!-- SCHEMA:removed_variable:END -->

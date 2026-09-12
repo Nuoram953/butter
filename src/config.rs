@@ -6,7 +6,7 @@ use std::{fs, io, path::PathBuf};
 use crate::rules::{
     file::FileRuleConfig, file_content::FileContentRuleConfig,
     file_group::FileGroupRuleConfig, file_name::FileNameRuleConfig,
-    result::RuleResult,
+    removed_variable::RemovedVariableRuleConfig, result::RuleResult,
 };
 
 const APP_NAME: &str = "butter";
@@ -32,6 +32,9 @@ pub enum RuleConfig {
 
     #[serde(rename = "file_content")]
     FileContent(FileContentRuleConfig),
+
+    #[serde(rename = "removed_variable")]
+    RemovedVariable(RemovedVariableRuleConfig),
 }
 
 impl RuleConfig {
@@ -41,6 +44,7 @@ impl RuleConfig {
             RuleConfig::FileName(r) => r.evaluate(branch),
             RuleConfig::FileGroup(r) => r.evaluate(branch),
             RuleConfig::FileContent(r) => r.evaluate(branch),
+            RuleConfig::RemovedVariable(r) => r.evaluate(branch),
         }
     }
 }

@@ -1,6 +1,7 @@
 use butter::rules::{
     file::FileRuleConfig, file_content::FileContentRuleConfig,
     file_group::FileGroupRuleConfig, file_name::FileNameRuleConfig,
+    removed_variable::RemovedVariableRuleConfig,
 };
 use schemars::schema_for;
 use serde_json::Value;
@@ -130,6 +131,11 @@ fn main() -> std::io::Result<()> {
     let value: Value = serde_json::to_value(&schema).unwrap();
     let md = schema_to_markdown(&value, "file_content");
     update_readme_section("README.md", "file_content", &md)?;
+
+    let schema = schema_for!(RemovedVariableRuleConfig);
+    let value: Value = serde_json::to_value(&schema).unwrap();
+    let md = schema_to_markdown(&value, "removed_variable");
+    update_readme_section("README.md", "removed_variable", &md)?;
 
     Ok(())
 }
