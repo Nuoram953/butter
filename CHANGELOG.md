@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/Nuoram953/butter/compare/v1.4.1...v1.5.0) (2026-09-12)
+
+
+### Features
+
+* add `file_content` rule ([2a7c5e4](https://github.com/Nuoram953/butter/commit/2a7c5e4b73ca648e7709298239945cd7d3cd6fbe))
+
 ## [1.4.1](https://github.com/Nuoram953/butter/compare/v1.4.0...v1.4.1) (2026-06-28)
 
 
