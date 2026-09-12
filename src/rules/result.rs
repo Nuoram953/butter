@@ -48,7 +48,29 @@ pub fn get_rule_result_status(failures: usize, level: &Level) -> Status {
 pub fn render_message(template: &str, vars: &[(&str, &str)]) -> String {
     let mut result = template.to_string();
     for (key, value) in vars {
+        result = result.replace(&format!("{{{{{key}}}}}"), value);
         result = result.replace(&format!("{{{key}}}"), value);
     }
     result
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_render_message_single_brace() {
+        let msg = render_message("File {file} failed", &[("file", "app.rs")]);
+        assert_eq!(msg, "File app.rs failed");
+    }
+
+    #[test]
+    fn test_render_message_double_brace() {
+        let msg = render_message(
+            "Values {{values}} differed in {{file}}",
+            &[("values", "1 != 2"), ("file", "dev.tf")],
+        );
+        assert_eq!(msg, "Values 1 != 2 differed in dev.tf");
+    }
+}
+

@@ -1,5 +1,6 @@
 use butter::rules::{
-    file::FileRuleConfig, file_group::FileGroupRuleConfig, file_name::FileNameRuleConfig,
+    file::FileRuleConfig, file_content::FileContentRuleConfig,
+    file_group::FileGroupRuleConfig, file_name::FileNameRuleConfig,
 };
 use schemars::schema_for;
 use serde_json::Value;
@@ -13,6 +14,31 @@ fn resolve_type(prop: &Value, root: &Value) -> String {
             }
         }
         return "object".to_string();
+    }
+
+    // If it's a oneOf (common with single or multi-variant enums with const), extract allowed values.
+    if let Some(one_of) = prop.get("oneOf").and_then(|o| o.as_array()) {
+        let values: Vec<&str> = one_of
+            .iter()
+            .filter_map(|v| v.get("const").and_then(|c| c.as_str()))
+            .collect();
+        if !values.is_empty() {
+            let joined = values.join(", ");
+            let ty = one_of
+                .first()
+                .and_then(|v| v.get("type"))
+                .and_then(|t| t.as_str())
+                .unwrap_or("string");
+            return format!("{ty} (`{joined}`)");
+        }
+    }
+
+    if let Some(val) = prop.get("const").and_then(|c| c.as_str()) {
+        let ty = prop
+            .get("type")
+            .and_then(|t| t.as_str())
+            .unwrap_or("string");
+        return format!("{ty} (`{val}`)");
     }
 
     let ty = prop
@@ -99,6 +125,11 @@ fn main() -> std::io::Result<()> {
     let value: Value = serde_json::to_value(&schema).unwrap();
     let md = schema_to_markdown(&value, "file_group");
     update_readme_section("README.md", "file_group", &md)?;
+
+    let schema = schema_for!(FileContentRuleConfig);
+    let value: Value = serde_json::to_value(&schema).unwrap();
+    let md = schema_to_markdown(&value, "file_content");
+    update_readme_section("README.md", "file_content", &md)?;
 
     Ok(())
 }

@@ -111,3 +111,21 @@ Checks that all files in group are modified.
 
 
 <!-- SCHEMA:file_group:END -->
+
+<!-- SCHEMA:file_content:START -->
+### `file_content`
+
+Verifies consistency of extracted values across a group of files.
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `always` | boolean | no | If true, always check all files in the group even if none of them were changed in git. Defaults to false. |
+| `extract` | string | yes | Regular expression used to extract values. If a capture group is present, group 1 is extracted; otherwise, the full match is used. |
+| `group` | array | yes | List of files that are expected to have consistent extracted content. |
+| `level` | string (`warn, error`) | yes | Severity of the rule. |
+| `message` | string | yes | Message displayed when the rule fails. Supports {{values}} and {{file}} placeholders. |
+| `name` | string | yes | Name of the rule. |
+| `require` | string (`identical`) | no | Policy for comparing extracted values. Defaults to `identical`. |
+
+
+<!-- SCHEMA:file_content:END -->

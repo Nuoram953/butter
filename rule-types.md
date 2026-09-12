@@ -82,11 +82,24 @@ Unlike `file`, this type compares the changed-set against the full group rather 
 
 ---
 
-## `file_content` _(not yet implemented — proposed)_
+## `file_content`
 
-For cases where touching all the right files isn't enough — you also want to confirm the files agree on something (e.g. the same version string, the same instance count). This would require a way to extract and compare a value from each file, which is meaningfully more complex than path matching and likely needs engine support beyond YAML (e.g. a regex/key extractor per file).
+For cases where touching all the right files isn't enough — you also want to confirm the files agree on something (e.g. the same version string, the same instance count). This extracts and compares values from a group of files using a regular expression.
 
-**Sketch**
+**Fields**
+
+| Field     | Required | Description                                                                                                   |
+| --------- | -------- | ------------------------------------------------------------------------------------------------------------- |
+| `name`    | yes      | Unique identifier for the rule                                                                                |
+| `type`    | yes      | `file_content`                                                                                                |
+| `group`   | yes      | List of files expected to have consistent extracted content                                                   |
+| `extract` | yes      | Regular expression used to extract values. If a capture group `(...)` is present, group 1 is used; else match |
+| `require` | no       | Policy for comparing extracted values. Defaults to `identical`                                                |
+| `always`  | no       | If `true`, checks group even if no files changed in git. Defaults to `false`                                  |
+| `message` | yes      | Message shown when values mismatch. Supports `{{values}}` and `{{file}}` template variables                   |
+| `level`   | yes      | `warn` or `error`                                                                                             |
+
+**Example**
 
 ```yaml
 - name: tf_instance_counts_must_match
@@ -101,19 +114,21 @@ For cases where touching all the right files isn't enough — you also want to c
   level: error
 ```
 
-Not included in the working config — flagged here only as the natural next step if path-level checks turn out to be insufficient.
+**Use when:** you need to verify content-level consistency across multiple configuration or source files (such as version strings, environment settings, or replica counts).
 
 ---
 
 ## Field Summary Across Types
 
-| Field     | `file` | `file_group` | `file_content` (proposed) |
-| --------- | ------ | ------------ | ------------------------- |
-| `name`    | ✓      | ✓            | ✓                         |
-| `type`    | ✓      | ✓            | ✓                         |
-| `when`    | ✓      | —            | —                         |
-| `group`   | —      | ✓            | ✓                         |
-| `require` | —      | ✓            | ✓                         |
-| `extract` | —      | —            | ✓                         |
-| `message` | ✓      | ✓            | ✓                         |
-| `level`   | ✓      | ✓            | ✓                         |
+| Field     | `file` | `file_group` | `file_content` |
+| --------- | ------ | ------------ | -------------- |
+| `name`    | ✓      | ✓            | ✓              |
+| `type`    | ✓      | ✓            | ✓              |
+| `when`    | ✓      | —            | —              |
+| `group`   | —      | ✓            | ✓              |
+| `require` | —      | ✓            | ✓              |
+| `extract` | —      | —            | ✓              |
+| `always`  | —      | —            | ✓              |
+| `message` | ✓      | ✓            | ✓              |
+| `level`   | ✓      | ✓            | ✓              |
+
