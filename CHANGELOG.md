@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/Nuoram953/butter/compare/v1.5.0...v1.6.0) (2026-09-12)
+
+
+### Features
+
+* add `removed_variable` rule ([d72fbcb](https://github.com/Nuoram953/butter/commit/d72fbcbfee1be5327c7da58bd0ac5f9189dc3951))
+
 # [1.5.0](https://github.com/Nuoram953/butter/compare/v1.4.1...v1.5.0) (2026-09-12)
 
 
